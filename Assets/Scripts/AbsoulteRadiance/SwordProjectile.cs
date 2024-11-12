@@ -6,11 +6,22 @@ public class SwordProjectile : MonoBehaviour
     public int damage = 1;
 
     private Vector2 direction;
+    private Collider2D spikeCollider;
 
     // Método para definir la dirección
     public void Initialize(Vector2 shootDirection)
     {
         direction = shootDirection.normalized;
+    }
+
+    private void Awake()
+    {
+        
+        if (gameObject.name == "BurstLightBeam(Clone)")
+        {
+            spikeCollider = GetComponent<Collider2D>();
+            spikeCollider.enabled = false;
+        }
     }
 
     private void Update()
@@ -22,11 +33,20 @@ public class SwordProjectile : MonoBehaviour
         Destroy(gameObject, 3f); // Ajusta el tiempo si es necesario
     }
 
+    public void EnableCollider()
+    {
+        spikeCollider.enabled = true;
+    }
+
+    public void DisableCollider()
+    {
+        spikeCollider.enabled = false;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            // Acciones al golpear al jugador (aplicar daño)
             PlayerController player = collision.GetComponent<PlayerController>();
             if (player != null)
             {

@@ -6,6 +6,7 @@ public class RadianceController : MonoBehaviour
     public int health = 18;
     public Transform[] teleportPoints;
     public GameObject swordProjectilePrefab;
+    public GameObject beamBurstPrefab;
     public GameObject beamPrefab;
     public float attackInterval = 2.0f;
 
@@ -46,7 +47,11 @@ public class RadianceController : MonoBehaviour
             if (health > 15)
             {
                 Teleport();
+                yield return new WaitForSeconds(1.0f);
                 SwordBurstAttack();
+                //BeamAttack();
+                //BeamBurstAttack(); 
+                //yield return new WaitForSeconds(1.0f);
             }
             else if (health > 11)
             {
@@ -89,25 +94,44 @@ public class RadianceController : MonoBehaviour
     private void SwordBurstAttack()
     {
         _animator.SetTrigger("SwordBurst");
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 12; i++)
         {
-            float angle = i * 45.0f; // Genera 8 ángulos separados uniformemente.
-            float radian = angle * Mathf.Deg2Rad; // Convierte el ángulo a radianes.
+            float angle = i * 30.0f;
+            float radian = angle * Mathf.Deg2Rad;
+            
+            Vector2 direction = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)).normalized;
 
-            // Calcula la dirección usando coseno y seno.
-            Vector2 direction = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)).normalized; // Asegura direcciones normalizadas.
-
-            // Instancia el proyectil con una rotación visual.
             Quaternion rotation = Quaternion.Euler(0, 0, angle);
             GameObject swordProjectile = Instantiate(swordProjectilePrefab, transform.position, rotation);
 
             SwordProjectile sword = swordProjectile.GetComponent<SwordProjectile>();
             if (sword != null)
             {
-                // Asigna la dirección directamente al proyectil para que se mueva correctamente.
                 sword.Initialize(direction);
-                //Debug.Log($"Proyectil {i}: Dirección asignada = {direction}"); // Depuración
+                //Debug.Log($"Proyectil {i}: Dirección asignada = {direction}");
             }
+        }
+    }
+
+    private void BeamBurstAttack()
+    {
+        //_animator.SetTrigger("SwordBurst");
+        for (int i = 0; i < 8; i++)
+        {
+            float angle = i * 45.0f;
+            float radian = angle * Mathf.Deg2Rad;
+
+            Vector2 direction = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian));
+
+            Quaternion rotation = Quaternion.Euler(0, 0, angle);
+            GameObject beamProjectile = Instantiate(beamBurstPrefab, transform.position, rotation);
+
+            /*SwordProjectile sword = beamProjectile.GetComponent<SwordProjectile>();
+            if (sword != null)
+            {
+                sword.Initialize(direction);
+                Debug.Log($"Proyectil {i}: Dirección asignada = {direction}");
+            }*/
         }
     }
 
