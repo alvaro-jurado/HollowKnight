@@ -110,6 +110,7 @@ public class PlayerController : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("PlayerInvulnerable");
 
         health = Math.Max(health - damage, 0);
+        Debug.Log("Player hp" + health);
 
         if (health == 0)
         {
@@ -316,7 +317,6 @@ public class PlayerController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    /* ######################################################### */
 
     private bool checkGrounded()
     {
@@ -492,11 +492,11 @@ public class PlayerController : MonoBehaviour
         float radius = 0.6f;
 
         float distance = 1.5f;
-        LayerMask layerMask = LayerMask.GetMask("Enemy") | LayerMask.GetMask("Trap") | LayerMask.GetMask("Switch") | LayerMask.GetMask("Projectile");
+        LayerMask layerMask = LayerMask.GetMask("Radiance") | LayerMask.GetMask("Enemy") | LayerMask.GetMask("Trap") | LayerMask.GetMask("Switch") | LayerMask.GetMask("Projectile");
 
         RaycastHit2D[] hitRecList = Physics2D.CircleCastAll(origin, radius, detectDirection, distance, layerMask);
 
-        /*foreach (RaycastHit2D hitRec in hitRecList)
+        foreach (RaycastHit2D hitRec in hitRecList)
         {
             GameObject obj = hitRec.collider.gameObject;
 
@@ -504,21 +504,28 @@ public class PlayerController : MonoBehaviour
             
             if (layerName == "Switch")
             {
-                Switch swithComponent = obj.GetComponent<Switch>();
-                if (swithComponent != null)
-                    swithComponent.turnOn();
+                //Switch swithComponent = obj.GetComponent<Switch>();
+                //if (swithComponent != null)
+                   // swithComponent.turnOn();
             } 
             else if (layerName == "Enemy")
             {
                 EnemyController enemyController = obj.GetComponent<EnemyController>();
                 if (enemyController != null)
                     enemyController.hurt(1);
+                // Debug.Log("Player hp" + health);
             }
             else if (layerName == "Projectile")
             {
                 Destroy(obj);
             }
-        }*/
+            else if (layerName == "Radiance")
+            {
+                RadianceController radianceController = obj.GetComponent<RadianceController>();
+                if (radianceController != null)
+                    radianceController.TakeDamage(1);
+            }
+        }
 
         if (hitRecList.Length > 0)
         {
