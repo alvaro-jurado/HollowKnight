@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     private bool _isInputEnabled;
     private bool _isFalling;
     private bool _isAttackable;
+    private bool _isSpiritVengeful;
 
     private float _climbJumpDelay = 0.2f;
     private float _attackEffectLifeTime = 0.05f;
@@ -55,6 +56,7 @@ public class PlayerController : MonoBehaviour
         _isInputEnabled = true;
         _isSprintReset = true;
         _isAttackable = true;
+        _isSpiritVengeful = true;
 
         _animator = gameObject.GetComponent<Animator>();
         _rigidbody = gameObject.GetComponent<Rigidbody2D>();
@@ -74,6 +76,7 @@ public class PlayerController : MonoBehaviour
             fallControl();
             sprintControl();
             attackControl();
+            spiritVengefulControl();
         }
     }
 
@@ -95,11 +98,6 @@ public class PlayerController : MonoBehaviour
 
             _isSprintable = true;
         }
-
-        /*if (collision.collider.tag == "Bench")
-        {
-            SceneManager.LoadScene("Radiance");
-        }*/
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -157,7 +155,6 @@ public class PlayerController : MonoBehaviour
 
         StartCoroutine(recoverFromHurtCoroutine());
     }
-
 
     private IEnumerator recoverFromHurtCoroutine()
     {
@@ -293,6 +290,27 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.J) && !_isClimb && _isAttackable)
             attack();
+    }
+
+
+    private void spiritVengefulControl()
+    {
+        if (Input.GetKeyDown(KeyCode.H) && !_isClimb && _isAttackable && _isSpiritVengeful)
+        {
+            _isSpiritVengeful = false;
+            _animator.SetTrigger("IsSpiritVengeful");
+            StartCoroutine(ActivateSpiritVengeful());
+        }
+    }
+
+    private IEnumerator ActivateSpiritVengeful()
+    {
+        yield return new WaitForSeconds(1f);
+        _isSpiritVengeful = false;
+
+        _animator.ResetTrigger("IsSpiritVengeful");
+        yield return new WaitForSeconds(0.1f);
+        _isSpiritVengeful = true;
     }
 
     private void die()
