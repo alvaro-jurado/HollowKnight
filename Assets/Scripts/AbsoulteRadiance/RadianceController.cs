@@ -18,7 +18,7 @@ public class RadianceController : MonoBehaviour
     public GameObject orbPrefab;
     public GameObject spikePrefab;
 
-    public float attackInterval = 1.5f;
+    public float attackInterval = 1f;
 
     private Animator _animator;
     private bool isAlive = true;
@@ -108,7 +108,7 @@ public class RadianceController : MonoBehaviour
             case 4:
                 return new Func<IEnumerator>[] { () => SwordWallAttack(UnityEngine.Random.value > 0.5f), OrbAttack };
             case 5:
-                return new Func<IEnumerator>[] { SwordRainAttack, OrbAttack, SpikeFloorAttack };
+                return new Func<IEnumerator>[] { SwordRainAttack, OrbAttack, /*SpikeFloorAttack*/ };
             default:
                 return new Func<IEnumerator>[] { };
         }
