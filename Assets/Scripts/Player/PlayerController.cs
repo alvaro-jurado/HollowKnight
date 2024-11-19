@@ -107,6 +107,10 @@ public class PlayerController : MonoBehaviour
         {
             SceneManager.LoadScene("Radiance");
         }
+        if (other.tag == "ResetGround")
+        {
+            hurt(100);
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -328,7 +332,7 @@ public class PlayerController : MonoBehaviour
 
         material.bounciness = 0;
         material.friction = 0;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene("Godhome");
     }
 
 

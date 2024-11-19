@@ -13,6 +13,7 @@ TagManager:
   - PlayerAttack
   - Radiance
   - Bench
+  - ResetGround
   layers:
   - Default
   - TransparentFX
