@@ -18,12 +18,13 @@ public class RadianceController : MonoBehaviour
     public GameObject orbPrefab;
     public GameObject spikePrefab;
 
-    public float attackInterval = 2.0f;
+    public float attackInterval = 1.5f;
 
     private Animator _animator;
     private bool isAlive = true;
     private bool isAttacking = false;
     private int currentPhase = 1;
+    private int lastTeleportIndex = -1;
 
     private void Start()
     {
@@ -75,6 +76,7 @@ public class RadianceController : MonoBehaviour
             if (!isAttacking)
             {
                 isAttacking = true;
+                yield return new WaitForSeconds(attackInterval);
 
                 var phaseAttacks = GetAttacksForCurrentPhase();
                 if (phaseAttacks.Length > 0)
@@ -84,7 +86,7 @@ public class RadianceController : MonoBehaviour
                 }
 
                 isAttacking = false;
-                yield return new WaitForSeconds(attackInterval);
+                //yield return new WaitForSeconds(attackInterval);
             }
             else
             {
@@ -98,7 +100,7 @@ public class RadianceController : MonoBehaviour
         switch (currentPhase)
         {
             case 1:
-                return new Func<IEnumerator>[] { SwordBurstAttack, BeamBurstAttack };
+                return new Func<IEnumerator>[] { SwordBurstAttack, BeamBurstAttack, Teleport };
             case 2:
                 return new Func<IEnumerator>[] { SwordRainAttack, /*SpikeFloorAttack*/ };
             case 3:
@@ -112,12 +114,21 @@ public class RadianceController : MonoBehaviour
         }
     }
 
-    private void Teleport()
+    private IEnumerator Teleport()
     {
-        int randomIndex = UnityEngine.Random.Range(0, teleportPoints.Length);
+        int randomIndex;
+
+        do
+        {
+            randomIndex = UnityEngine.Random.Range(0, teleportPoints.Length);
+        } while (randomIndex == lastTeleportIndex);
+
+        lastTeleportIndex = randomIndex;
         transform.position = teleportPoints[randomIndex].position;
         _animator.SetTrigger("Teleport");
+        yield return new WaitForSeconds(0.2f);
     }
+
 
     private IEnumerator SwordBurstAttack()
     {
@@ -188,9 +199,6 @@ public class RadianceController : MonoBehaviour
             yield return new WaitForSeconds(wave == 0 ? 2.5f : 2.0f);
         }
     }
-
-
-
 
     private IEnumerator SwordWallAttack(bool leftToRight)
     {

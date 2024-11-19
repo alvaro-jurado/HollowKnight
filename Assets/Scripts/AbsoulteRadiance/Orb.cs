@@ -9,7 +9,7 @@ public class Orb : MonoBehaviour
     public void Initialize(Transform target)
     {
         this.target = target;
-        Destroy(gameObject, 3f);
+        Destroy(gameObject, 5f);
     }
 
     private void Update()
