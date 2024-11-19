@@ -107,10 +107,14 @@ public class PlayerController : MonoBehaviour
 
     public void hurt(int damage)
     {
-        gameObject.layer = LayerMask.NameToLayer("PlayerInvulnerable");
+        if (gameObject.layer == LayerMask.NameToLayer("PlayerInvulnerable"))
+        {
+            Debug.Log("El jugador es invulnerable y no puede recibir daño.");
+            return;
+        }
 
         health = Math.Max(health - damage, 0);
-        Debug.Log("Player hp" + health);
+        Debug.Log("Player hp: " + health);
 
         if (health == 0)
         {
@@ -118,19 +122,16 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        // enter invulnerable state
+        gameObject.layer = LayerMask.NameToLayer("PlayerInvulnerable");
         _animator.SetTrigger("IsHurt");
 
-        // stop player movement
         Vector2 newVelocity;
         newVelocity.x = 0;
         newVelocity.y = 0;
         _rigidbody.velocity = newVelocity;
 
-        // visual effect
         _spriteRenderer.color = invulnerableColor;
 
-        // death recoil
         Vector2 newForce;
         newForce.x = -_transform.localScale.x * hurtRecoil.x;
         newForce.y = hurtRecoil.y;
@@ -140,6 +141,7 @@ public class PlayerController : MonoBehaviour
 
         StartCoroutine(recoverFromHurtCoroutine());
     }
+
 
     private IEnumerator recoverFromHurtCoroutine()
     {

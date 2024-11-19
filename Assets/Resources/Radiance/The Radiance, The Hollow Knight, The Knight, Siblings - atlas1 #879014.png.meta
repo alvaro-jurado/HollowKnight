@@ -189,7 +189,7 @@ TextureImporter:
         width: 668
         height: 575
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -197,6 +197,27 @@ TextureImporter:
       bones: []
       spriteID: 5f8c8db4575190e42b2ae5b051a823f2
       internalID: -1629676709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: The Radiance, The Hollow Knight, The Knight, Siblings - atlas1 #879014_5
+      rect:
+        serializedVersion: 2
+        x: 2645
+        y: 2157
+        width: 105
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43bd3b01929f849429008cf1d6ee8320
+      internalID: -1237574382
       vertices: []
       indices: 
       edges: []
@@ -217,6 +238,7 @@ TextureImporter:
       The Radiance, The Hollow Knight, The Knight, Siblings - atlas1 #879014_2: -1676200921
       The Radiance, The Hollow Knight, The Knight, Siblings - atlas1 #879014_3: -542676419
       The Radiance, The Hollow Knight, The Knight, Siblings - atlas1 #879014_4: -1629676709
+      The Radiance, The Hollow Knight, The Knight, Siblings - atlas1 #879014_5: -1237574382
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

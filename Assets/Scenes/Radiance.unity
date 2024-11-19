@@ -1111,6 +1111,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1701969898617409398, guid: cb407897cc9e94a4abface9e1a7ce5fb, type: 3}
+      propertyPath: health
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1237,12 +1241,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 18
+  phase1HealthThreshold: 15
+  phase2HealthThreshold: 11
+  phase3HealthThreshold: 8
+  phase4HealthThreshold: 1
   teleportPoints:
   - {fileID: 830206339}
   - {fileID: 1597849843}
   swordProjectilePrefab: {fileID: 4284885795196152189, guid: 625fa775ce283534db403d1ed7564c4c, type: 3}
   beamBurstPrefab: {fileID: 5309085147702730768, guid: ab76f2e548a3e204b9657bf31f71eef0, type: 3}
-  beamPrefab: {fileID: 5309085147702730768, guid: 0272d18c43ea4e845a70d39c453c27e8, type: 3}
+  swordRainPrefab: {fileID: 4284885795196152189, guid: 1d59b82f0bfc7eb4bb7acc51a7bd2c06, type: 3}
+  orbPrefab: {fileID: 4284885795196152189, guid: 648a910483802ec428630963b85d36f1, type: 3}
+  spikePrefab: {fileID: 8058799066634176254, guid: d8b70e16044e05f45a1b3bf5cc66fc3d, type: 3}
   attackInterval: 2
 --- !u!60 &2097117913
 PolygonCollider2D:

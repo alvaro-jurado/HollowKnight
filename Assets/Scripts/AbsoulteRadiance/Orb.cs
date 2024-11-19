@@ -1,20 +1,24 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-public class SwordProjectile : MonoBehaviour
+public class Orb : MonoBehaviour
 {
-    public float speed = 10f;
+    public float speed = 3f;
+    private Transform target;
     public int damage = 1;
-    private Vector2 direction;
 
-    public void Initialize(Vector2 shootDirection)
+    public void Initialize(Transform target)
     {
-        direction = shootDirection.normalized;
+        this.target = target;
+        Destroy(gameObject, 3f);
     }
 
     private void Update()
     {
-        transform.position += (Vector3)direction * speed * Time.deltaTime;
-        Destroy(gameObject, 3f);
+        if (target != null)
+        {
+            Vector2 direction = (target.position - transform.position).normalized;
+            transform.Translate(direction * speed * Time.deltaTime);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -26,6 +30,7 @@ public class SwordProjectile : MonoBehaviour
             {
                 player.hurt(damage);
             }
+
             Destroy(gameObject);
         }
     }
