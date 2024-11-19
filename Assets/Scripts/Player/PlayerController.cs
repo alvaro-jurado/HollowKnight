@@ -95,6 +95,18 @@ public class PlayerController : MonoBehaviour
 
             _isSprintable = true;
         }
+
+        /*if (collision.collider.tag == "Bench")
+        {
+            SceneManager.LoadScene("Radiance");
+        }*/
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Bench")
+        {
+            SceneManager.LoadScene("Radiance");
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)

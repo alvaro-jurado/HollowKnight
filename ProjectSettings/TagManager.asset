@@ -12,6 +12,7 @@ TagManager:
   - Projectile
   - PlayerAttack
   - Radiance
+  - Bench
   layers:
   - Default
   - TransparentFX
