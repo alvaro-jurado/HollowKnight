@@ -77,11 +77,13 @@ public class RadianceController : MonoBehaviour
             {
                 isAttacking = true;
                 yield return new WaitForSeconds(attackInterval);
-
+                _animator.SetBool("SwordBurst", false);
+                _animator.SetBool("SwordRain", false);
                 var phaseAttacks = GetAttacksForCurrentPhase();
                 if (phaseAttacks.Length > 0)
                 {                    
                     var attack = phaseAttacks[UnityEngine.Random.Range(0, phaseAttacks.Length)];
+                    //Debug.Log(attack);
                     yield return StartCoroutine(attack.Invoke());
                 }
 
@@ -125,14 +127,15 @@ public class RadianceController : MonoBehaviour
 
         lastTeleportIndex = randomIndex;
         transform.position = teleportPoints[randomIndex].position;
-        _animator.SetTrigger("Teleport");
+        //_animator.SetTrigger("Teleport");
         yield return new WaitForSeconds(0.2f);
     }
 
 
     private IEnumerator SwordBurstAttack()
     {
-        _animator.SetTrigger("SwordBurst");
+        _animator.SetBool("SwordBurst", true);
+        yield return new WaitForSeconds(1.0f);
         for (int i = 0; i < 12; i++)
         {
             float angle = i * 30.0f;
@@ -151,7 +154,9 @@ public class RadianceController : MonoBehaviour
             }
             
         }
+        
         yield return new WaitForSeconds(1.0f);
+        
     }
 
     private IEnumerator BeamBurstAttack()
@@ -172,7 +177,7 @@ public class RadianceController : MonoBehaviour
     private IEnumerator SwordRainAttack()
     {
         float columnSpacing = 1.5f;
-
+        _animator.SetBool("SwordRain", true);
         for (int wave = 0; wave < (currentPhase == 3 ? int.MaxValue : 4); wave++)
         {
             for (int column = 0; column < 18; column++)
