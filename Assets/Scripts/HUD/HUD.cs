@@ -16,6 +16,12 @@ public class HUD : MonoBehaviour
         }
     }
 
+    public void resumeScene()
+    {
+        pauseMenu.SetActive(!pauseMenu.activeSelf);
+        Time.timeScale = 1;
+    }
+
     public void loadMenu()
     {
         Time.timeScale = 1;
