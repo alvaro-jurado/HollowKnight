@@ -123,12 +123,12 @@ public class PlayerController : MonoBehaviour
     {
         if (gameObject.layer == LayerMask.NameToLayer("PlayerInvulnerable"))
         {
-            Debug.Log("El jugador es invulnerable y no puede recibir daño.");
+            //Debug.Log("El jugador es invulnerable y no puede recibir daño.");
             return;
         }
 
         health = Math.Max(health - damage, 0);
-        Debug.Log("Player hp: " + health);
+        //Debug.Log("Player hp: " + health);
 
         if (health == 0)
         {
