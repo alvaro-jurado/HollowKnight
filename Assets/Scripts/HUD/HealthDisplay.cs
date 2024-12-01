@@ -14,18 +14,18 @@ public class HealthDisplay : MonoBehaviour
     public Sprite healthFull;
     public Sprite healthEmpty;
 
-    private Image[] _hearts;
+    private Image[] hearts;
     private PlayerController playerController;
 
     void Start()
     {
-        _hearts = new Image[5];
+        hearts = new Image[5];
 
-        _hearts[0] = heart1.GetComponent<Image>();
-        _hearts[1] = heart2.GetComponent<Image>();
-        _hearts[2] = heart3.GetComponent<Image>();
-        _hearts[3] = heart4.GetComponent<Image>();
-        _hearts[4] = heart5.GetComponent<Image>();
+        hearts[0] = heart1.GetComponent<Image>();
+        hearts[1] = heart2.GetComponent<Image>();
+        hearts[2] = heart3.GetComponent<Image>();
+        hearts[3] = heart4.GetComponent<Image>();
+        hearts[4] = heart5.GetComponent<Image>();
 
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
@@ -35,12 +35,12 @@ public class HealthDisplay : MonoBehaviour
         int healthRemain = playerController.health;
         for (int i = 0; i < healthRemain; ++i)
         {
-            _hearts[i].sprite = healthFull;
+            hearts[i].sprite = healthFull;
         }
 
         for (int i = healthRemain; i < 5; ++i)
         {
-            _hearts[i].sprite = healthEmpty;
+            hearts[i].sprite = healthEmpty;
         }
     }
 }

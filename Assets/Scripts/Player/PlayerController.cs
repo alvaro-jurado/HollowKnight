@@ -33,17 +33,20 @@ public class PlayerController : MonoBehaviour
     public GameObject attackForwardEffect;
     public GameObject attackDownEffect;
 
-    private bool _isGrounded;
-    private bool _isClimb;
-    private bool _isSprintable;
-    private bool _isSprintReset;
-    private bool _isInputEnabled;
-    private bool _isFalling;
-    private bool _isAttackable;
-    private bool _isSpiritVengeful;
+    public GameObject spiritVengefulProjectilePrefab;
+    public float projectileSpeed;
 
-    private float _climbJumpDelay = 0.2f;
-    private float _attackEffectLifeTime = 0.05f;
+    private bool isGrounded;
+    private bool isClimb;
+    private bool isSprintable;
+    private bool isSprintReset;
+    private bool isInputEnabled;
+    private bool isFalling;
+    private bool isAttackable;
+    private bool isSpiritVengeful;
+
+    private float climbJumpDelay = 0.2f;
+    private float attackEffectLifeTime = 0.05f;
 
     private Animator _animator;
     private Rigidbody2D _rigidbody;
@@ -51,12 +54,11 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private BoxCollider2D _boxCollider;
 
-    // Start is called before the first frame update
     private void Start() {
-        _isInputEnabled = true;
-        _isSprintReset = true;
-        _isAttackable = true;
-        _isSpiritVengeful = true;
+        isInputEnabled = true;
+        isSprintReset = true;
+        isAttackable = true;
+        isSpiritVengeful = true;
 
         _animator = gameObject.GetComponent<Animator>();
         _rigidbody = gameObject.GetComponent<Rigidbody2D>();
@@ -65,11 +67,10 @@ public class PlayerController : MonoBehaviour
         _boxCollider = gameObject.GetComponent<BoxCollider2D>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         updatePlayerState();
-        if (_isInputEnabled)
+        if (isInputEnabled)
         {
             move();
             jumpControl();
@@ -82,8 +83,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // enter climb state
-        if (collision.collider.tag == "Wall" && !_isGrounded)
+        if (collision.collider.tag == "Wall" && !isGrounded)
         {
             _rigidbody.gravityScale = 0;
 
@@ -93,10 +93,10 @@ public class PlayerController : MonoBehaviour
 
             _rigidbody.velocity = newVelocity;
 
-            _isClimb = true;
+            isClimb = true;
             _animator.SetBool("IsClimb", true);
 
-            _isSprintable = true;
+            isSprintable = true;
         }
     }
     private void OnTriggerEnter2D(Collider2D other)
@@ -104,6 +104,10 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "Bench")
         {
             SceneManager.LoadScene("Radiance");
+        }
+        if (other.tag == "GodhomeEntrance")
+        {
+            SceneManager.LoadScene("Godhome");
         }
         if (other.tag == "ResetGround")
         {
@@ -113,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.collider.tag == "Wall" && _isFalling && !_isClimb)
+        if (collision.collider.tag == "Wall" && isFalling && !isClimb)
         {
             OnCollisionEnter2D(collision);
         }
@@ -123,12 +127,12 @@ public class PlayerController : MonoBehaviour
     {
         if (gameObject.layer == LayerMask.NameToLayer("PlayerInvulnerable"))
         {
-            //Debug.Log("El jugador es invulnerable y no puede recibir daño.");
+            Debug.Log("El jugador es invulnerable y no puede recibir daño.");
             return;
         }
 
         health = Math.Max(health - damage, 0);
-        //Debug.Log("Player hp: " + health);
+        Debug.Log("Player hp: " + health);
 
         if (health == 0)
         {
@@ -151,7 +155,7 @@ public class PlayerController : MonoBehaviour
         newForce.y = hurtRecoil.y;
         _rigidbody.AddForce(newForce, ForceMode2D.Impulse);
 
-        _isInputEnabled = false;
+        isInputEnabled = false;
 
         StartCoroutine(recoverFromHurtCoroutine());
     }
@@ -159,7 +163,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator recoverFromHurtCoroutine()
     {
         yield return new WaitForSeconds(hurtTime);
-        _isInputEnabled = true;
+        isInputEnabled = true;
         yield return new WaitForSeconds(hurtRecoverTime);
         _spriteRenderer.color = Color.white;
         gameObject.layer = LayerMask.NameToLayer("Player");
@@ -170,24 +174,22 @@ public class PlayerController : MonoBehaviour
         // exit climb state
         if (collision.collider.tag == "Wall")
         {
-            _isClimb = false;
+            isClimb = false;
             _animator.SetBool("IsClimb", false);
 
             _rigidbody.gravityScale = 1;
         }
     }
 
-    /* ######################################################### */
-
     private void updatePlayerState()
     {
-        _isGrounded = checkGrounded();
-        _animator.SetBool("IsGround", _isGrounded);
+        isGrounded = checkGrounded();
+        _animator.SetBool("IsGround", isGrounded);
 
         float verticalVelocity = _rigidbody.velocity.y;
         _animator.SetBool("IsDown", verticalVelocity < 0);
 
-        if (_isGrounded )
+        if (isGrounded )
         {
             _animator.SetBool("IsJump", false);
             _animator.ResetTrigger("IsJumpFirst");
@@ -195,56 +197,48 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool("IsDown", false);
 
             jumpLeft = 2;
-            _isClimb = false;
-            _isSprintable = true;
+            isClimb = false;
+            isSprintable = true;
         }
-        else if(_isClimb)
+        else if(isClimb)
         {
-            // one remaining jump chance after climbing
             jumpLeft = 1;
         }
     }
 
     private void move()
     {
-        // calculate movement
         float horizontalMovement = Input.GetAxis("Horizontal") * moveSpeed;
 
-        // set velocity
         Vector2 newVelocity;
         newVelocity.x = horizontalMovement;
         newVelocity.y = _rigidbody.velocity.y;
         _rigidbody.velocity = newVelocity;
 
-        if (!_isClimb)
+        if (!isClimb)
         {
-            // the sprite itself is inversed 
-            float moveDirection = -transform.localScale.x * horizontalMovement;
+            float moveDirection = -_transform.localScale.x * horizontalMovement;
 
             if (moveDirection < 0)
             {
-                // flip player sprite
                 Vector3 newScale;
                 newScale.x = horizontalMovement < 0 ? 1 : -1;
                 newScale.y = 1;
                 newScale.z = 1;
 
-                transform.localScale = newScale;
+                _transform.localScale = newScale;
 
-                if (_isGrounded)
+                if (isGrounded)
                 {
-                    // turn back animation
                     _animator.SetTrigger("IsRotate");
                 }
             }
             else if (moveDirection > 0)
             {
-                // move forward
                 _animator.SetBool("IsRun", true);
             }
         }
 
-        // stop
         if (Input.GetAxis("Horizontal") == 0)
         {
             _animator.SetTrigger("stopTrigger");
@@ -262,7 +256,7 @@ public class PlayerController : MonoBehaviour
         if (!Input.GetButtonDown("Jump"))
             return;
 
-        if (_isClimb)
+        if (isClimb)
             climbJump();
         else if (jumpLeft > 0)
             jump();
@@ -270,65 +264,85 @@ public class PlayerController : MonoBehaviour
 
     private void fallControl()
     {
-        if (Input.GetButtonUp("Jump") && !_isClimb)
+        if (Input.GetButtonUp("Jump") && !isClimb)
         {
-            _isFalling = true;
+            isFalling = true;
             fall();
         } else
         {
-            _isFalling = false;
+            isFalling = false;
         }
     }
 
     private void sprintControl()
     {
-        if (Input.GetKeyDown(KeyCode.K) && _isSprintable && _isSprintReset)
+        if (Input.GetKeyDown(KeyCode.K) && isSprintable && isSprintReset)
             sprint();
     }
 
     private void attackControl()
     {
-        if (Input.GetKeyDown(KeyCode.J) && !_isClimb && _isAttackable)
+        if (Input.GetKeyDown(KeyCode.J) && !isClimb && isAttackable)
             attack();
     }
 
 
     private void spiritVengefulControl()
     {
-        if (Input.GetKeyDown(KeyCode.H) && !_isClimb && _isAttackable && _isSpiritVengeful)
+        if (Input.GetKeyDown(KeyCode.H) && !isClimb && isAttackable && isSpiritVengeful)
         {
-            _isSpiritVengeful = false;
-            _animator.SetTrigger("IsSpiritVengeful");
+            isSpiritVengeful = false;
+            //_animator.SetTrigger("IsSpiritVengeful");
+            ShootSpiritVengefulProjectile();
             StartCoroutine(ActivateSpiritVengeful());
         }
     }
 
+    private void ShootSpiritVengefulProjectile()
+    {
+        GameObject projectile = Instantiate(spiritVengefulProjectilePrefab, _transform.position, Quaternion.identity);
+
+        Vector2 direction = _transform.localScale.x < 0 ? Vector2.right : Vector2.left;
+        Rigidbody2D projectileRb = projectile.GetComponent<Rigidbody2D>();
+        if (projectileRb != null)
+        {
+            projectileRb.velocity = direction * projectileSpeed;
+        }
+
+        if (direction == Vector2.right)
+        {
+            projectile.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else
+        {
+            projectile.transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+    }
+
+
     private IEnumerator ActivateSpiritVengeful()
     {
         yield return new WaitForSeconds(1f);
-        _isSpiritVengeful = false;
+        isSpiritVengeful = false;
 
-        _animator.ResetTrigger("IsSpiritVengeful");
+        //_animator.ResetTrigger("IsSpiritVengeful");
         yield return new WaitForSeconds(0.1f);
-        _isSpiritVengeful = true;
+        isSpiritVengeful = true;
     }
 
     private void die()
     {
         _animator.SetTrigger("IsDead");
 
-        _isInputEnabled = false;
+        isInputEnabled = false;
 
-        // stop player movement
         Vector2 newVelocity;
         newVelocity.x = 0;
         newVelocity.y = 0;
         _rigidbody.velocity = newVelocity;
 
-        // visual effect
         _spriteRenderer.color = invulnerableColor;
 
-        // death recoil
         Vector2 newForce;
         newForce.x = -_transform.localScale.x * deathRecoil.x;
         newForce.y = deathRecoil.y;
@@ -342,7 +356,6 @@ public class PlayerController : MonoBehaviour
         var material = _boxCollider.sharedMaterial;
         material.bounciness = 0.3f;
         material.friction = 0.3f;
-        // unity bug, need to disable and then enable to make it work
         _boxCollider.enabled = false;
         _boxCollider.enabled = true;
 
@@ -350,7 +363,7 @@ public class PlayerController : MonoBehaviour
 
         material.bounciness = 0;
         material.friction = 0;
-        SceneManager.LoadScene("Godhome");
+        SceneManager.LoadScene("MainMenu");
     }
 
 
@@ -360,7 +373,6 @@ public class PlayerController : MonoBehaviour
 
         float radius = 0.2f;
 
-        // detect downwards
         Vector2 direction;
         direction.x = 0;
         direction.y = -1;
@@ -395,32 +407,31 @@ public class PlayerController : MonoBehaviour
     private void climbJump()
     {
         Vector2 realClimbJumpForce;
-        realClimbJumpForce.x = climbJumpForce.x * transform.localScale.x;
+        realClimbJumpForce.x = climbJumpForce.x * _transform.localScale.x;
         realClimbJumpForce.y = climbJumpForce.y;
         _rigidbody.AddForce(realClimbJumpForce, ForceMode2D.Impulse);
 
         _animator.SetTrigger("IsClimbJump");
         _animator.SetTrigger("IsJumpFirst");
 
-        _isInputEnabled = false;
-        StartCoroutine(climbJumpCoroutine(_climbJumpDelay));
+        isInputEnabled = false;
+        StartCoroutine(climbJumpCoroutine(climbJumpDelay));
     }
 
     private IEnumerator climbJumpCoroutine(float delay)
     {
         yield return new WaitForSeconds(delay);
 
-        _isInputEnabled = true;
+        isInputEnabled = true;
 
         _animator.ResetTrigger("IsClimbJump");
 
-        // jump to the opposite direction
         Vector3 newScale;
-        newScale.x = -transform.localScale.x;
+        newScale.x = -_transform.localScale.x;
         newScale.y = 1;
         newScale.z = 1;
 
-        transform.localScale = newScale;
+        _transform.localScale = newScale;
     }
 
     private void fall()
@@ -434,26 +445,24 @@ public class PlayerController : MonoBehaviour
 
     private void sprint()
     {
-        // reject input during sprinting
-        _isInputEnabled = false;
-        _isSprintable = false;
-        _isSprintReset = false;
+        isInputEnabled = false;
+        isSprintable = false;
+        isSprintReset = false;
 
         Vector2 newVelocity;
-        newVelocity.x = transform.localScale.x * (_isClimb ? sprintSpeed : -sprintSpeed);
+        newVelocity.x = _transform.localScale.x * (isClimb ? sprintSpeed : -sprintSpeed);
         newVelocity.y = 0;
 
         _rigidbody.velocity = newVelocity;
 
-        if (_isClimb)
+        if (isClimb)
         {
-            // sprint to the opposite direction
             Vector3 newScale;
-            newScale.x = -transform.localScale.x;
+            newScale.x = -_transform.localScale.x;
             newScale.y = 1;
             newScale.z = 1;
 
-            transform.localScale = newScale;
+            _transform.localScale = newScale;
         }
 
         _animator.SetTrigger("IsSprint");
@@ -463,11 +472,11 @@ public class PlayerController : MonoBehaviour
     private IEnumerator sprintCoroutine(float sprintDelay, float sprintInterval)
     {
         yield return new WaitForSeconds(sprintDelay);
-        _isInputEnabled = true;
-        _isSprintable = true;
+        isInputEnabled = true;
+        isSprintable = true;
 
         yield return new WaitForSeconds(sprintInterval);
-        _isSprintReset = true;
+        isSprintReset = true;
     }
 
     private void attack()
@@ -475,7 +484,7 @@ public class PlayerController : MonoBehaviour
         float verticalDirection = Input.GetAxis("Vertical");
         if (verticalDirection > 0)
             attackUp();
-        else if (verticalDirection < 0 && !_isGrounded)
+        else if (verticalDirection < 0 && !isGrounded)
             attackDown();
         else
             attackForward();
@@ -490,7 +499,7 @@ public class PlayerController : MonoBehaviour
         detectDirection.x = 0;
         detectDirection.y = 1;
 
-        StartCoroutine(attackCoroutine(attackUpEffect, _attackEffectLifeTime, attackInterval, detectDirection, attackUpRecoil));
+        StartCoroutine(attackCoroutine(attackUpEffect, attackEffectLifeTime, attackInterval, detectDirection, attackUpRecoil));
     }
 
     private void attackForward()
@@ -499,14 +508,14 @@ public class PlayerController : MonoBehaviour
         attackForwardEffect.SetActive(true);
 
         Vector2 detectDirection;
-        detectDirection.x = -transform.localScale.x;
+        detectDirection.x = -_transform.localScale.x;
         detectDirection.y = 0;
 
         Vector2 recoil;
-        recoil.x = transform.localScale.x > 0 ? -attackForwardRecoil.x : attackForwardRecoil.x;
+        recoil.x = _transform.localScale.x > 0 ? -attackForwardRecoil.x : attackForwardRecoil.x;
         recoil.y = attackForwardRecoil.y;
 
-        StartCoroutine(attackCoroutine(attackForwardEffect, _attackEffectLifeTime, attackInterval, detectDirection, recoil));
+        StartCoroutine(attackCoroutine(attackForwardEffect, attackEffectLifeTime, attackInterval, detectDirection, recoil));
     }
 
     private void attackDown()
@@ -518,7 +527,7 @@ public class PlayerController : MonoBehaviour
         detectDirection.x = 0;
         detectDirection.y = -1;
 
-        StartCoroutine(attackCoroutine(attackDownEffect, _attackEffectLifeTime, attackInterval, detectDirection, attackDownRecoil));
+        StartCoroutine(attackCoroutine(attackDownEffect, attackEffectLifeTime, attackInterval, detectDirection, attackDownRecoil));
     }
 
     private IEnumerator attackCoroutine(GameObject attackEffect,float effectDelay, float attackInterval, Vector2 detectDirection, Vector2 attackRecoil)
@@ -537,14 +546,8 @@ public class PlayerController : MonoBehaviour
             GameObject obj = hitRec.collider.gameObject;
 
             string layerName = LayerMask.LayerToName(obj.layer);
-            
-            if (layerName == "Switch")
-            {
-                //Switch swithComponent = obj.GetComponent<Switch>();
-                //if (swithComponent != null)
-                   // swithComponent.turnOn();
-            } 
-            else if (layerName == "Enemy")
+
+            if (layerName == "Enemy")
             {
                 EnemyController enemyController = obj.GetComponent<EnemyController>();
                 if (enemyController != null)
@@ -572,9 +575,8 @@ public class PlayerController : MonoBehaviour
 
         attackEffect.SetActive(false);
 
-        // attack cool down
-        _isAttackable = false;
+        isAttackable = false;
         yield return new WaitForSeconds(attackInterval);
-        _isAttackable = true;
+        isAttackable = true;
     }
 }

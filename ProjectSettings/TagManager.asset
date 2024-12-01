@@ -14,6 +14,7 @@ TagManager:
   - Radiance
   - Bench
   - ResetGround
+  - GodhomeEntrance
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Enemy
   - Radiance
   - PlayerInvulnerable
-  - HUD
+  - EnemyDead
   - 
   - 
   - 

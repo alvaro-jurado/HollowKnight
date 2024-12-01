@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 
 public class RadianceController : MonoBehaviour
@@ -67,6 +68,7 @@ public class RadianceController : MonoBehaviour
         isAlive = false;
         _animator.SetTrigger("Die");
         Destroy(gameObject, 2.0f);
+        SceneManager.LoadScene("Ending");
     }
 
     private IEnumerator AttackPattern()

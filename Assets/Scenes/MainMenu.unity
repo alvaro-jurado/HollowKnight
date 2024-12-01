@@ -319,7 +319,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 803962758}
+      - m_Target: {fileID: 803962760}
         m_TargetAssemblyTypeName: VideoSettings, Assembly-CSharp
         m_MethodName: CancelChanges
         m_Mode: 1
@@ -2363,7 +2363,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 291495809}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82b3a5da3f4883d41becbfa55af879c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c00b7cf09e0c4e4f95a1fcdcd2c040c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainCanvas: {fileID: 771708734}
@@ -3661,7 +3661,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 803962758}
+      - m_Target: {fileID: 803962760}
         m_TargetAssemblyTypeName: VideoSettings, Assembly-CSharp
         m_MethodName: ConfirmChanges
         m_Mode: 1
@@ -4922,7 +4922,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 803962759}
-  - component: {fileID: 803962758}
+  - component: {fileID: 803962760}
   m_Layer: 0
   m_Name: VideoController
   m_TagString: Untagged
@@ -4930,29 +4930,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &803962758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 803962757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78ceb4094a026e94f8483cc999e37cf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resolutionText: {fileID: 948627416}
-  applyButton: {fileID: 1163538203}
-  leftArrow: {fileID: 1458958941}
-  rightArrow: {fileID: 1654820886}
-  fullscreenToggle: {fileID: 1604477924}
-  mainCanvas: {fileID: 771708734}
-  videoCanvas: {fileID: 468057442}
-  confirmationWindow: {fileID: 1509033710}
-  confirmButton: {fileID: 577627175}
-  cancelButton: {fileID: 13453348}
-  revertTime: 10
 --- !u!4 &803962759
 Transform:
   m_ObjectHideFlags: 0
@@ -4968,6 +4945,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &803962760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803962757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f242a477174c66947b8908f928b2ea06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resolutionText: {fileID: 948627416}
+  applyButton: {fileID: 1163538203}
+  leftArrow: {fileID: 1458958941}
+  rightArrow: {fileID: 1654820886}
+  fullscreenToggle: {fileID: 1604477924}
+  mainCanvas: {fileID: 771708734}
+  videoCanvas: {fileID: 468057442}
+  confirmationWindow: {fileID: 1509033710}
+  confirmButton: {fileID: 577627175}
+  cancelButton: {fileID: 13453348}
+  revertTime: 10
 --- !u!1 &812232125
 GameObject:
   m_ObjectHideFlags: 0
